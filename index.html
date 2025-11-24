@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Não Somos Invisíveis — Direitos Humanos</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    /* (mantive todo o seu CSS original — só formatei um pouco) */
+    .modal-bg {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.75); backdrop-filter: blur(4px);
+      display: none; justify-content: center; align-items: center; z-index: 9999;
+    }
+    .modal {
+      background: rgba(25,25,25,0.95); border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6); border-radius: 14px;
+      width: 90%; max-width: 650px; padding: 24px; animation: modalShow .35s ease;
+    }
+    @keyframes modalShow { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .modal img{ width:100%; border-radius:12px; margin-bottom:14px; }
+    .modal h2{ font-family: Montserrat; color:#3B82F6; margin-bottom:8px; }
+    .modal p{ color:#ddd; line-height:1.6; margin-bottom:10px; }
+    .close-modal{ position:absolute; top:20px; right:20px; font-size:26px; cursor:pointer; color:#fff; transition:.3s; }
+    .close-modal:hover{ color:#3B82F6; }
+
+    :root{
+      --preto:#0a0a0a; --cinza:#2b2b2b; --azul:#1E3A8A; --azul-claro:#3B82F6;
+      --prata:#C0C0C0; --branco:#f5f5f5;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Roboto',sans-serif;}
+    body{background:var(--preto);color:var(--branco);scroll-behavior:smooth;}
+
+    header{
+      position:fixed;top:0;left:0;width:100%;
+      display:flex;justify-content:space-between;align-items:center;
+      padding:14px 28px;
+      background:linear-gradient(180deg,rgba(10,10,10,0.95),rgba(20,20,20,0.85));
+      border-bottom:1px solid rgba(255,255,255,0.05);
+      z-index:1000;
+    }
+    .brand{display:flex;align-items:center;gap:14px}
+    .brand svg{width:56px;height:56px;}
+    .brand .title{font-family:Montserrat;font-weight:700;font-size:18px;color:var(--prata);}
+    .brand small{font-size:12px;color:#aaa;display:block}
+    nav a{color:var(--branco);text-decoration:none;margin:0 10px;font-weight:600;}
+    nav a:hover{color:var(--azul-claro);}
+    .social-top{ display:flex;align-items:center;gap:12px; }
+    .social-top a{ color:var(--prata);font-size:18px;transition:.3s; }
+    .social-top a:hover{color:var(--azul-claro);transform:scale(1.2);}
+
+    .hero{ margin-top:84px; height:75vh; background-image:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.3)),url('https://as1.ftcdn.net/v2/jpg/15/43/40/20/1000_F_1543402065_Ps1NcqtdgM7U8vO4kSKiKwyh6LNaN6Ws.jpg'); background-size:cover;background-position:center; display:flex;align-items:center;justify-content:center;text-align:center;padding:0 20px;}
+    .hero h1{ font-family:Montserrat; font-size:44px; color:var(--prata); text-shadow:0 6px 18px rgba(0,0,0,0.7); }
+    .hero p{margin:12px 0 20px;font-size:18px;color:#eee;}
+    .cta{ background:var(--azul-claro); color:#fff;padding:12px 22px; border-radius:8px;text-decoration:none; font-weight:700;transition:.3s; }
+    .cta:hover{background:var(--azul);}
+
+    main{max-width:1200px;margin:40px auto;padding:0 18px;}
+    section{background:linear-gradient(180deg,var(--cinza),#1b1b1b); border-radius:12px;padding:24px;margin-bottom:24px; box-shadow:0 4px 20px rgba(0,0,0,0.4);}
+    h2{font-family:Montserrat;color:var(--prata);margin-bottom:10px;}
+    p{color:#d0d0d0;margin-bottom:10px;}
+
+    .grid{display:grid;gap:16px;}
+    .grid.cols-3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr));}
+    .card{ background:#111;padding:16px;border-radius:10px; border:1px solid rgba(255,255,255,0.05); }
+    .card h3{color:var(--azul-claro);margin-bottom:8px;}
+    .card p{color:#ccc;}
+
+    .carousel-container{position:relative;overflow:hidden;border-radius:10px;margin-top:10px;}
+    .carousel{display:flex;transition:transform .5s ease;will-change:transform;}
+    .slide{min-width:100%;box-sizing:border-box;text-align:center;padding:16px;}
+    .slide img{width:100%;max-height:360px;object-fit:cover;border-radius:10px;margin-bottom:10px;}
+    .slide h3{color:var(--azul-claro);margin-bottom:6px;}
+    .slide p{color:#ddd;}
+    .carousel-btn{ position:absolute;top:50%;transform:translateY(-50%); background:rgba(0,0,0,0.5);color:#fff;border:none; font-size:22px;padding:10px;border-radius:50%;cursor:pointer; display:flex;align-items:center;justify-content:center; }
+    .prev{left:12px;} .next{right:12px;}
+    .carousel-btn:hover{background:rgba(0,0,0,0.8);}
+
+    .indicators{ display:flex; justify-content:center; gap:8px; margin-top:12px; }
+    .indicators button{ width:12px;height:12px; border-radius:50%; border:none; background:rgba(255,255,255,0.4); cursor:pointer; transition:0.3s; }
+    .indicators button.active{background:var(--azul-claro);transform:scale(1.2);}
+
+    .laws-list{list-style:none;margin-top:10px;padding-left:0;}
+    .laws-list li{ margin-bottom:12px;background:#111;padding:14px 16px; border-radius:8px;border-left:4px solid var(--azul-claro); display:flex;align-items:center;gap:12px;transition:.3s; }
+    .laws-list li i{font-size:20px;color:var(--azul-claro);}
+    .laws-list li a{color:var(--prata);font-weight:500;text-decoration:none;}
+    .laws-list li a:hover{color:var(--azul-claro);text-decoration:underline;}
+    .laws-list li:hover{background:#1a1a1a;transform:translateX(4px);}
+    .btn-legislacao{ display:inline-block;margin-top:16px; background:var(--azul-claro); color:#fff;padding:12px 20px;border-radius:8px; text-decoration:none;font-weight:600;transition:.3s; }
+    .btn-legislacao:hover{background:var(--azul);}
+
+    form{display:flex;flex-direction:column;gap:12px;margin-top:14px;}
+    form input,form select,form textarea{ background:#111;border:1px solid rgba(255,255,255,0.1); color:#fff;padding:10px 12px;border-radius:6px;resize:none; }
+    form button{ background:var(--azul-claro);border:none;padding:12px; border-radius:8px;color:#fff;font-weight:700; cursor:pointer;transition:.3s; }
+    form button:hover{background:var(--azul);}
+
+    .apoie-btns{margin-top:20px;display:flex;justify-content:center;flex-wrap:wrap;gap:12px;}
+    .apoie-btns a{ display:inline-flex;align-items:center;gap:8px; background:#1E3A8A;color:#fff;padding:10px 18px; border-radius:8px;text-decoration:none;font-weight:600; transition:.3s; }
+    .apoie-btns a:hover{background:var(--azul-claro);transform:scale(1.05);}
+
+    footer{ background:linear-gradient(180deg,var(--preto),var(--cinza)); text-align:center;color:var(--prata); padding:30px 10px;margin-top:40px; border-top:1px solid rgba(255,255,255,0.08); }
+    footer .social-links{margin-top:18px;display:flex;justify-content:center;gap:20px;}
+    footer .social-links a{ color:var(--prata);font-size:24px;text-decoration:none;transition:0.3s; }
+    footer .social-links a:hover{color:var(--azul-claro);transform:scale(1.15);}
+
+    @media(max-width:700px){ header{flex-direction:column;text-align:center;} nav{margin-top:10px;} .hero h1{font-size:32px;} .carousel-btn{font-size:20px;padding:8px;} }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="brand">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" aria-hidden="true" focusable="false">
+        <defs><linearGradient id="gA" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0f0f0f"/><stop offset="1" stop-color="#1E3A8A"/></linearGradient></defs>
+        <circle cx="600" cy="600" r="520" fill="url(#gA)"/><circle cx="600" cy="440" r="70" fill="#FFFFFF"/>
+      </svg>
+      <div>
+        <div class="title">Não Somos Invisíveis</div>
+        <small>Direitos Humanos • Voz & Dignidade</small>
+      </div>
+    </div>
+
+    <div class="social-top" aria-hidden="false">
+      <a href="https://facebook.com" target="_blank" aria-label="Facebook" rel="noopener"><i class="fab fa-facebook-f"></i></a>
+      <a href="https://instagram.com" target="_blank" aria-label="Instagram" rel="noopener"><i class="fab fa-instagram"></i></a>
+      <a href="https://twitter.com" target="_blank" aria-label="X / Twitter" rel="noopener"><i class="fab fa-x"></i></a>
+      <a href="https://youtube.com" target="_blank" aria-label="YouTube" rel="noopener"><i class="fab fa-youtube"></i></a>
+      <a href="https://linkedin.com" target="_blank" aria-label="LinkedIn" rel="noopener"><i class="fab fa-linkedin-in"></i></a>
+    </div>
+  </header>
+
+  <section class="hero" id="home">
+    <div>
+      <h1>Não Somos Invisíveis</h1>
+      <p>Promovendo igualdade, liberdade e justiça para todos.</p>
+      <a href="#contato" class="cta">Apoie Agora</a>
+    </div>
+  </section>
+
+  <main>
+    <section id="sobre">
+      <h2>Sobre Nós</h2>
+      <p>O projeto “Não Somos Invisíveis” nasceu para dar voz e dignidade às pessoas que sofrem injustiças, discriminação e abandono. Atuamos com voluntários e parceiros em prol dos direitos humanos e da vida.</p>
+    </section>
+
+    <section id="entretenimento-completo">
+      <h2>🎭 Entretenimento Completo — Filmes, Séries e Jogos</h2>
+      <p>Seleção completa de conteúdos que abordam direitos humanos, inclusão social e histórias reais de superação.</p>
+
+      <!-- FILMES -->
+      <h3 style="margin-top:30px;color:#3B82F6;font-family:Montserrat;">🎬 Filmes</h3>
+      <div class="grid cols-3">
+        <div class="card"><img src="https://i.imgur.com/5QJxkF1.jpeg" alt="A Vida é Bela"><h3>A Vida é Bela</h3><p>Um retrato emocionante sobre esperança mesmo diante da perseguição e da guerra.</p></div>
+        <div class="card"><img src="https://i.imgur.com/vq6Bwp0.jpeg" alt="12 Anos de Escravidão"><h3>12 Anos de Escravidão</h3><p>Baseado em fatos reais, aborda racismo, injustiça e sobrevivência.</p></div>
+        <div class="card"><img src="https://i.imgur.com/BJojBq9.jpeg" alt="Hotel Ruanda"><h3>Hotel Ruanda</h3><p>O drama de um homem que arriscou tudo para salvar vidas durante um genocídio.</p></div>
+        <div class="card"><img src="https://i.imgur.com/jXUfVc4.jpeg" alt="O Menino que Descobriu o Vento"><h3>O Menino que Descobriu o Vento</h3><p>Superação e inovação para salvar sua comunidade da miséria.</p></div>
+      </div>
+
+      <!-- SÉRIES -->
+      <h3 style="margin-top:40px;color:#3B82F6;font-family:Montserrat;">📺 Séries</h3>
+      <div class="grid cols-3">
+        <div class="card"><img src="https://i.imgur.com/6T7z3sm.jpeg" alt="Olhos que Condenam"><h3>Olhos que Condenam</h3><p>A história real dos “5 do Central Park” injustamente acusados.</p></div>
+        <div class="card"><img src="https://i.imgur.com/g3Pru5U.jpeg" alt="Quando Eles Nos Veem"><h3>Quando Eles Nos Veem</h3><p>Série impactante sobre racismo estrutural e injustiça criminal.</p></div>
+        <div class="card"><img src="https://i.imgur.com/9O7BZ0p.jpeg" alt="O Mecanismo"><h3>O Mecanismo</h3><p>Baseada em casos reais de corrupção e disputa por poder.</p></div>
+      </div>
+
+      <!-- JOGOS -->
+      <h3 style="margin-top:40px;color:#3B82F6;font-family:Montserrat;">🎮 Jogos</h3>
+      <div class="grid cols-3">
+        <div class="card"><img src="https://i.imgur.com/VH4pU8A.jpeg" alt="PeaceMaker"><h3>PeaceMaker</h3><p>Simulação estratégica focada em resolver conflitos diplomáticos.</p></div>
+        <div class="card"><img src="https://i.imgur.com/NB6vD5G.jpeg" alt="This War of Mine"><h3>This War of Mine</h3><p>Mostra o lado civil da guerra, sobrevivência e moralidade.</p></div>
+        <div class="card"><img src="https://i.imgur.com/DuZHM6Y.jpeg" alt="Life is Strange"><h3>Life is Strange</h3><p>Escolhas morais, direitos individuais, bullying e relações humanas.</p></div>
+      </div>
+    </section>
+
+    <section id="causas">
+      <h2>Nossas Causas</h2>
+      <div class="grid cols-3">
+        <div class="card"><h3>Direito à Educação</h3><p>Garantir acesso igualitário à educação de qualidade para todos.</p></div>
+        <div class="card"><h3>Combate à Violência</h3><p>Promover políticas públicas e ações de acolhimento.</p></div>
+        <div class="card"><h3>Inclusão Social</h3><p>Incentivar oportunidades de trabalho e respeito às diferenças.</p></div>
+        <div class="card"><h3>Resgate de Pessoas</h3><p>Atuação no resgate e combate ao tráfico humano.</p></div>
+        <div class="card"><h3>Combate ao Abuso Infantil</h3><p>Combater todas as formas de abuso contra crianças e adolescentes.</p></div>
+        <div class="card"><h3>Apoio a Imigrantes</h3><p>Amparo humanitário e acolhimento digno a imigrantes.</p></div>
+        <div class="card"><h3>Combate ao tráfico Humano</h3><p>Com apoio de associados e voluntários cadastrados.</p></div>
+        <div class="card"><h3>Apoio ao Hospital do Cancer Infamtil</h3><p>Com apoio de associados e voluntários cadastrados.</p></div>
+        
+      </div>
+    </section>
+
+    <!-- NOTÍCIAS COM CARROSSEL E BOLINHAS -->
+    <section id="noticias">
+      <h2>Notícias</h2>
+      <div class="carousel-container" aria-roledescription="carousel">
+        <button class="carousel-btn prev" aria-label="Anterior">⟨</button>
+
+        <div class="carousel" role="list">
+          <div class="slide" role="listitem">
+            <img src="4c790cb8-f105-44a0-8c35-a85dfc6bffce.jpg" alt="Campanha Nacional — imagens de arrecadação">
+            <h3>Campanha Nacional</h3>
+            <p>Arrecadação de alimentos em comunidades carentes.</p>
+          </div>
+          <div class="slide" role="listitem">
+            <img src="4c8835db-5177-4a38-8ea7-cdb1d86e32d3.jpg" alt="Evento de Conscientização — participantes">
+            <h3>Evento de Conscientização</h3>
+            <p>Atividades e palestras sobre igualdade.</p>
+          </div>
+          <div class="slide" role="listitem">
+            <img src="405abbda-9deb-4c20-aaa4-2ec641fb3343.jpg" alt="Parceria Internacional — representantes de ONGs">
+            <h3>Parceria Internacional</h3>
+            <p>Nova aliança com ONGs globais pelos direitos humanos.</p>
+          </div>
+        </div>
+
+        <button class="carousel-btn next" aria-label="Próximo">⟩</button>
+      </div>
+
+      <div class="indicators" aria-hidden="false" aria-label="Indicadores do carrossel"></div>
+    </section>
+
+    <section id="legislacao">
+      <h2>Legislação de Direitos Humanos</h2>
+      <p>Conheça as principais normas e tratados que garantem os direitos fundamentais:</p>
+      <ul class="laws-list">
+        <li><i class="fa-solid fa-globe"></i> <a href="https://www.un.org/en/about-us/universal-declaration-of-human-rights" target="_blank" rel="noopener"><strong>Declaração Universal dos Direitos Humanos (1948)</strong></a></li>
+        <li><i class="fa-solid fa-scale-balanced"></i> <a href="https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm" target="_blank" rel="noopener"><strong>Constituição Federal de 1988</strong></a></li>
+        <li><i class="fa-solid fa-children"></i> <a href="https://www.planalto.gov.br/ccivil_03/leis/l8069.htm" target="_blank" rel="noopener"><strong>Estatuto da Criança e do Adolescente (ECA)</strong></a></li>
+        <li><i class="fa-solid fa-person-dress"></i> <a href="https://www.institutomariadapenha.org.br/lei-11340/resumo-da-lei-maria-da-penha.html" target="_blank" rel="noopener"><strong>Lei Maria da Penha (Lei nº 11.340/2006)</strong></a></li>
+        <li><i class="fa-solid fa-wheelchair"></i> <a href="https://www.planalto.gov.br/ccivil_03/_ato2007-2010/2009/decreto/d6949.htm" target="_blank" rel="noopener"><strong>Convenção sobre os Direitos das Pessoas com Deficiência</strong></a></li>
+      </ul>
+      <a href="http://www.planalto.gov.br/ccivil_03/_Ato2004-2006/2006/Lei/L11340.htm" target="_blank" rel="noopener" class="btn-legislacao">⚖️ Acessar Lei Maria da Penha Completa</a>
+      <a href="https://www.bing.com/search?q=%0Ahttps%3A%2F%2Fwww.unicef.org%20%E2%80%BA%20brazil%20%E2%80%BA%20declaracao-universal-dos-direitos-hum%E2%80%A6&form=IPRV10" class="btn-legislacao">📘 Ver Legislação Completa</a>
+    </section>
+
+    <section id="contato">
+      <h2>Apoie Agora</h2>
+      <p>Junte-se a nós como associado ou voluntário e ajude a transformar vidas.</p>
+      <form onsubmit="event.preventDefault(); alert('Formulário enviado com sucesso!');">
+        <input type="text" placeholder="Nome completo" required>
+        <input type="email" placeholder="E-mail" required>
+        <select required>
+          <option value="">Selecione seu tipo de participação</option>
+          <option>Associado</option>
+          <option>Voluntário</option>
+        </select>
+        <textarea rows="4" placeholder="Conte-nos por que deseja participar"></textarea>
+        <button type="submit">Enviar Inscrição</button>
+      </form>
+
+      <div class="apoie-btns">
+        <a href="https://cayresdaniel31@gmail.com" target="_blank" rel="noopener"><i class="fa-solid fa-hand-holding-heart"></i> Apoiar via PIX</a>
+        <a href="https://apoia.se" target="_blank" rel="noopener"><i class="fa-solid fa-globe"></i> Apoiar via Plataforma</a>
+        <a href="https://instagram.com" target="_blank" rel="noopener"><i class="fab fa-instagram"></i> Seguir no Instagram</a>
+      </div>
+
+      <p style="margin-top:20px;">📧 <a href="mailto:contato@naosomosinvisiveis.org.br" style="color:var(--azul-claro);">contato@naosomosinvisiveis.org.br</a></p>
+    </section>
+  </main>
+
+  <footer>
+    © 2025 Não Somos Invisíveis.
+    <p>Primeiro MD/Tec/Infor/p/Inter</p>
+    <div style="margin-top:8px;">
+      <span style="margin-right:10px;">Pedro Henrique</span>
+      <span style="margin-right:10px;">Daniel Cayres</span>
+      <span>Arthur Gomes</span>
+    </div>
+    <div class="social-links" style="margin-top:12px;">
+      <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+      <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="https://youtube.com" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+    </div>
+  </footer> 
+
+  <!-- SCRIPT DO CARROSSEL (corrigido) -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const carousel = document.querySelector('.carousel');
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const indicatorsContainer = document.querySelector('.indicators');
+      const btnNext = document.querySelector('.next');
+      const btnPrev = document.querySelector('.prev');
+      const carouselContainer = document.querySelector('.carousel-container');
+
+      if (!carousel || slides.length === 0 || !indicatorsContainer) return;
+
+      let currentIndex = 0;
+      let autoplayInterval = null;
+      const AUTOPLAY_MS = 5000;
+
+      // cria as bolinhas (indicadores)
+      indicatorsContainer.innerHTML = '';
+      slides.forEach((_, idx) => {
+        const btn = document.createElement('button');
+        btn.setAttribute('aria-label', `Ir para slide ${idx + 1}`);
+        if (idx === 0) btn.classList.add('active');
+        btn.addEventListener('click', () => {
+          goToSlide(idx);
+          resetAutoplay();
+        });
+        indicatorsContainer.appendChild(btn);
+      });
+
+      const indicators = Array.from(indicatorsContainer.querySelectorAll('button'));
+
+      function updateTransform() {
+        carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+      }
+
+      function updateIndicators() {
+        indicators.forEach(b => b.classList.remove('active'));
+        if (indicators[currentIndex]) indicators[currentIndex].classList.add('active');
+      }
+
+      function goToSlide(index) {
+        if (index < 0) index = slides.length - 1;
+        if (index >= slides.length) index = 0;
+        currentIndex = index;
+        updateTransform();
+        updateIndicators();
+      }
+
+      // botões próximo/anterior
+      if (btnNext) {
+        btnNext.addEventListener('click', () => {
+          goToSlide((currentIndex + 1) % slides.length);
+          resetAutoplay();
+        });
+      }
+
+      if (btnPrev) {
+        btnPrev.addEventListener('click', () => {
+          goToSlide((currentIndex - 1 + slides.length) % slides.length);
+          resetAutoplay();
+        });
+      }
+
+      function startAutoplay() {
+        stopAutoplay();
+        autoplayInterval = setInterval(() => {
+          goToSlide(currentIndex + 1);
+        }, AUTOPLAY_MS);
+      }
+
+      function stopAutoplay() {
+        if (autoplayInterval) clearInterval(autoplayInterval);
+        autoplayInterval = null;
+      }
+
+      function resetAutoplay() {
+        stopAutoplay();
+        startAutoplay();
+      }
+
+      // pausa ao hover
+      if (carouselContainer) {
+        carouselContainer.addEventListener('mouseenter', stopAutoplay);
+        carouselContainer.addEventListener('mouseleave', startAutoplay);
+      }
+
+      // inicia autoplay
+      startAutoplay();
+    });
+  </script>
+</body>
+</html>
